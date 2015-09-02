@@ -99,6 +99,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\AppSettings.cs" />
+    <Compile Include="Classes\CallClass.cs" />
+    <Compile Include="Classes\ConnectTheDotsHelper.cs" />
+    <Compile Include="Classes\ConnectTheDotsSensor.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

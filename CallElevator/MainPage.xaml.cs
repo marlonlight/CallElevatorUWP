@@ -14,6 +14,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using CallElevator.Classes;
+using System.Runtime.Serialization.Json;
+using System.Text;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -28,10 +31,13 @@ namespace CallElevator
         IHubProxy chat;
         public SynchronizationContext Context { get; set; }
 
+        //Using EventHub
+        ConnectTheDotsHelper ctdHelper;
+
         public MainPage()
         {
             this.InitializeComponent();
-            makeConnection();
+           // makeConnection();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -39,13 +45,13 @@ namespace CallElevator
             CallElevator();
         }
 
-        async private void CallElevator()
+        private void CallElevator()
         {
             try
             {
                 tbstatus.Text = "Elevador foi chamado";
-                await chat.Invoke("Send", "callElevator", "100");
-
+                //await chat.Invoke("Send", "callElevator", "100");
+                sendToAzure("1");
             }
             catch (Exception ex)
             {
@@ -74,6 +80,21 @@ namespace CallElevator
             {
 
             }
+        }
+
+        private void sendToAzure(string sended)
+        {
+            CallClass cc = new CallClass();
+            cc.value = sended;
+            cc.guid = Guid.NewGuid().ToString();
+
+            ctdHelper = new ConnectTheDotsHelper(serviceBusNamespace: "elevatorIoT",
+                eventHubName: "elevatorEH",
+                keyName: "elevatorSEND",
+                key: "POoyLPA/J8Qad82M2eaUL097T7FooJePJ4va1n4irAY=",
+                call: sended);
+
+            ctdHelper.SendData(cc);
         }
 
     }
